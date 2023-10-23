@@ -21,7 +21,7 @@ jobs:
           lfs: false
       - name: 'Create env file'
         run: |
-          echo "NEWS_API_KEY=${{ secrets.NEWS_API_KEY }}" > .env
+          echo NEWS_API_KEY="${{ secrets.NEWS_API_KEY }}" > .env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

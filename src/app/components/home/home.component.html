@@ -1,8 +1,76 @@
-<div>
-  <p-button label="Fetch" (onClick)="fetchNews()"></p-button>
-</div>
+<div class="container">
+  <p-table [value]="articles" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" dataKey="id"
+           [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [totalRecords]="totalRecords" editMode="row"
+           styleClass="p-datatable-striped" [scrollable]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:25%">Title</th>
+        <th style="width:15%">Author</th>
+        <th style="width:30%">Description</th>
+        <th style="width:20%">Image</th>
+        <th style="width:10%">Published</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-article let-editing="editing" let-rowIndex="rowIndex">
+      <tr [pEditableRow]="article">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <textarea name="title" required rows="5" cols="30" pInputTextarea [(ngModel)]="article.title"
+                        [autoResize]="true" [maxlength]="50"></textarea>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{article.title}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
 
-<div>
-  <p-button label="Feed" (onClick)="feedDatabase()"></p-button>
-</div>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <textarea rows="2" cols="30" pInputTextarea [(ngModel)]="article.author"
+                        [autoResize]="true" [maxlength]="50"></textarea>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{article.author}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
 
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <textarea name="description" required rows="5" cols="30" pInputTextarea [(ngModel)]="article.description"
+                        [autoResize]="true" [maxlength]="300"></textarea>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{article.description}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="article.urlToImage"
+                        [autoResize]="true" [maxlength]="300"></textarea>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{article.urlToImage}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>{{ article.publishedAt | date: 'fullDate'}}</td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(article)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(article)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(article, rowIndex)" class="p-button-rounded p-button-text p-button-danger"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

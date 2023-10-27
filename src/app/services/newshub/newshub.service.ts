@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
-import { map, Observable, of } from "rxjs";
+import { Observable, of } from "rxjs";
 
 import { Article } from "../../types/article.type";
 import { PaginatedResponse } from "../../types/paginated.type";
@@ -36,16 +36,15 @@ export class NewshubService {
   }
 
   getArticleById(id: string): Observable<Article> {
-    return this.httpClient.get<any>('../../../../assets/mock.json').pipe(
-      map(response => response.articles.find((article: Article) => article.id === id)),
-      map(article => {
-        if (article) {
-          return article;
-        } else {
-          throw new Error('Article not found'); // Throw an error if no article is found
-        }
-      })
-    );
+    return this.httpClient.get<Article>(`${this.baseUrl}/get/${id}${this.getCode}`);
+  }
+
+  addArticle(article: Article): Observable<Article> {
+    return this.httpClient.post<Article>(`${this.baseUrl}/add${this.getCode}`, article);
+  }
+
+  updateArticle(article: Article): Observable<Article> {
+    return this.httpClient.put<Article>(`${this.baseUrl}/update/${article.id}${this.getCode}`, article);
   }
 
   search(searchTerm: string, limit: number, pageNumber = 1): Observable<PaginatedResponse> {

@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
 import { NewshubService } from "../../services/newshub/newshub.service";
+import {Article} from "../../types/article.type";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-article',
@@ -13,9 +15,11 @@ export class ArticleComponent implements OnInit{
 
   articleForm: FormGroup;
 
+  private readonly nullId = "0";
+
   constructor(private activatedRoute: ActivatedRoute, private newshubService: NewshubService) {
     this.articleForm = new FormGroup({
-      id: new FormControl(''),
+      id: new FormControl(this.nullId),
       title: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
       author: new FormControl(''),
       description: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
@@ -24,8 +28,8 @@ export class ArticleComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id') || '0';
-    if(id !== '0') {
+    const id = this.activatedRoute.snapshot.paramMap.get('id') || "0";
+    if(id !== this.nullId) {
       this.getArticleById(id);
     }
   }
@@ -48,6 +52,20 @@ export class ArticleComponent implements OnInit{
   }
 
   save(articleForm: FormGroup) {
-    console.log(articleForm.value)
+    const article: Article = articleForm.value;
+
+    console.log(article);
+
+    let observable: Observable<Article>;
+
+    if(article.id !== this.nullId) {
+      observable = this.newshubService.updateArticle(article);
+    } else {
+      observable = this.newshubService.addArticle(article);
+    }
+
+    observable.subscribe({
+      next: article => console.log(article)
+    })
   }
 }

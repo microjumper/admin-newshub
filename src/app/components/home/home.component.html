@@ -8,6 +8,18 @@
 </p-toolbar>
 
 <div class="container">
+  <div class="py-3">
+    <form [formGroup]="searchForm">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+        <span class="p-float-label">
+            <input id="search" type="text" pInputText formControlName="search" [pKeyFilter]="alphanumericWithSpace">
+            <label for="search">Search</label>
+          </span>
+      </div>
+    </form>
+  </div>
+
   <p-table [value]="articles" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" dataKey="id"
            [lazy]="true" (onLazyLoad)="onLazyLoad($event)" styleClass="p-datatable-striped" [scrollable]="true"
            selectionMode="single" (onRowSelect)="onSelect($event.data)">
@@ -26,7 +38,8 @@
         <td> {{article.author}} </td>
         <td> {{article.description}} </td>
         <td>
-          <img [src]="article.urlToImage" width="200" height="150" alt="" class="article-image">
+          <img #img [src]="article.urlToImage" (error)="onImageError(img)"
+               width="200" height="150" alt="" class="article-image"/>
         </td>
         <td>{{ article.publishedAt | date: 'fullDate'}}</td>
       </tr>

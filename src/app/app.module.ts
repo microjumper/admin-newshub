@@ -19,6 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ArticleComponent } from './components/article/article.component';
+import {KeyFilterModule} from "primeng/keyfilter";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ArticleComponent } from './components/article/article.component';
     CardModule,
     ReactiveFormsModule,
     ToolbarModule,
-    MenuModule
+    MenuModule,
+    KeyFilterModule
   ],
   providers: [EditableRow],
   bootstrap: [AppComponent]

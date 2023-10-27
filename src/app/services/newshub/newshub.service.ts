@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
-import {filter, map, Observable, of, tap} from "rxjs";
+import { map, Observable, of } from "rxjs";
 
 import { Article } from "../../types/article.type";
 import { PaginatedResponse } from "../../types/paginated.type";
@@ -29,14 +29,9 @@ export class NewshubService {
 
   getArticles(limit: number, pageNumber = 1): Observable<PaginatedResponse> {
     const offset = pageNumber - 1;
-//`${this.baseUrl}/all/${limit}/${offset}${this.getCode}`
-    const link = '../../../../assets/mock.json'
     if (limit > 0 && offset >= 0) {
-      return this.httpClient.get<PaginatedResponse>(link).pipe(
-        tap(response => this.processArticles(response.articles))
-      )
+      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/all/${limit}/${offset}${this.getCode}`);
     }
-
     return of({ totalRecords: 0, articles: [] })
   }
 
@@ -53,18 +48,12 @@ export class NewshubService {
     );
   }
 
-  private processArticles(articles: Article[]): Article[] {
-    articles.forEach(a => a.urlToImage = this.checkImageUrl(a.urlToImage));
-
-    return articles;
-  }
-
-  private checkImageUrl(url: string): string {
-    if (!url || url.length === 0) {
-      return 'assets/placeholder-image.png';
+  search(searchTerm: string, limit: number, pageNumber = 1): Observable<PaginatedResponse> {
+    const offset = pageNumber - 1;
+    if (limit > 0 && offset >= 0) {
+      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/search/${searchTerm}/${limit}/${offset}${this.searchCode}`);
     }
-
-    return url;
+    return of({ totalRecords: 0, articles: [] });
   }
 
   feedNewsHubDb(articles: Article[]) {

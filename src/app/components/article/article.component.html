@@ -1,0 +1,61 @@
+<div class="container">
+  <p-card class="article-card shadow-3">
+    <form [formGroup]="articleForm" (ngSubmit)="save(articleForm)">
+      <input id="id" type="hidden" formControlName="id">
+
+      <div class="p-grid p-fluid">
+        <div class="p-col-12 py-2">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-paperclip"></i></span>
+            <span class="p-float-label">
+              <textarea id="title" rows="5" cols="30" [autoResize]="true" [maxLength]="150" pInputTextarea formControlName="title"></textarea>
+            <label for="title">Title</label>
+          </span>
+          </div>
+        </div>
+
+        <div class="p-col-12 py-2">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-users"></i></span>
+            <span class="p-float-label">
+              <textarea id="author" rows="2" cols="30" [autoResize]="true" [maxLength]="150" pInputTextarea formControlName="author"></textarea>
+            <label for="author">Author</label>
+          </span>
+          </div>
+        </div>
+
+        <div class="p-col-12 py-2">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-align-left"></i></span>
+            <span class="p-float-label">
+              <textarea id="description" rows="5" cols="30" [autoResize]="true" [maxLength]="300" pInputTextarea formControlName="description"></textarea>
+            <label for="description">Description</label>
+          </span>
+          </div>
+        </div>
+
+        <div class="p-col-12 py-2">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon"><i class="pi pi-image"></i></span>
+            <span class="p-float-label">
+              <textarea id="image" rows="5" cols="30" [autoResize]="true" pInputTextarea formControlName="image"></textarea>
+            <label for="image">Image url</label>
+          </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-container py-2">
+        <button class="p-button-info p-button-raised" pButton pRipple routerLink="../"
+                #cancelButton (click)="cancelButton.blur()">CANCEL</button>
+
+        <button [disabled]="!articleForm.dirty || articleForm.invalid"
+                class="p-button-success p-button-raised" pButton pRipple type="submit"
+                #submitButton (click)="submitButton.blur()">SAVE</button>
+
+        <button class="p-button-danger p-button-raised" pButton pRipple
+                #deleteButton (click)="deleteButton.blur()">DELETE</button>
+      </div>
+    </form>
+  </p-card>
+</div>

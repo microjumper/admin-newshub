@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from "@angular/router";
 
 import { TableLazyLoadEvent } from "primeng/table";
+import { MenuItem } from "primeng/api";
 
 import { NewsApiService } from "../../services/news-api/news-api.service";
 import { NewshubService } from "../../services/newshub/newshub.service";
@@ -17,9 +19,25 @@ export class HomeComponent {
   totalRecords: number = 0;
   articles: Article[] = [];
 
-  private tmp= new Map<string, Article>();
+  items: MenuItem[] | undefined;
 
-  constructor(private newsApiService: NewsApiService, private newshubService: NewshubService) { }
+  constructor(private newsApiService: NewsApiService, private newshubService: NewshubService,
+              private router: Router) {
+    this.items = [
+      {
+        label: 'User',
+        items: [
+          {
+            label: 'Logout',
+            icon: 'pi pi-refresh',
+            command: () => {
+              this.logout();
+            }
+          }
+        ]
+      }
+    ];
+  }
 
   onLazyLoad(event: TableLazyLoadEvent): void {
     const first = event.first ? event.first : 0;
@@ -40,6 +58,18 @@ export class HomeComponent {
     });
   }
 
+  onSelect(article: Article) {
+    this.router.navigate(['articles', article.id]).then()
+  }
+
+  createArticle(): void {
+    this.router.navigate(['articles', 'create']).then()
+  }
+
+  private logout(): void {
+
+  }
+
   fetchNews(): void {
     this.newsApiService.getTopHeadlines().subscribe(
       response => {
@@ -53,22 +83,5 @@ export class HomeComponent {
     this.newshubService.feedNewsHubDb(this.articles).subscribe(
       response => console.log(response)
     )
-  }
-
-  onRowEditInit(article: Article) {
-    if (article.id != null) {
-      this.tmp.set(article.id, {...article});
-    }
-  }
-
-  onRowEditSave(article: Article) {
-    console.log(article)
-  }
-
-  onRowEditCancel(article: Article, rowIndex: number) {
-    if (article.id != null) {
-      this.articles[rowIndex] = this.tmp.get(article.id) as Article;
-      this.tmp.delete(article.id)
-    }
   }
 }

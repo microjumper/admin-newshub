@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
+import { Observable } from "rxjs";
+
 import { NewshubService } from "../../services/newshub/newshub.service";
-import {Article} from "../../types/article.type";
-import {Observable} from "rxjs";
+import { Article } from "../../types/article.type";
 
 @Component({
   selector: 'app-article',
@@ -15,7 +16,7 @@ export class ArticleComponent implements OnInit{
 
   articleForm: FormGroup;
 
-  private readonly nullId = "0";
+  readonly nullId = "0";
 
   constructor(private activatedRoute: ActivatedRoute, private newshubService: NewshubService) {
     this.articleForm = new FormGroup({
@@ -51,10 +52,8 @@ export class ArticleComponent implements OnInit{
     );
   }
 
-  save(articleForm: FormGroup) {
-    const article: Article = articleForm.value;
-
-    console.log(article);
+  save() {
+    const article: Article = this.articleForm.value;
 
     let observable: Observable<Article>;
 
@@ -67,5 +66,17 @@ export class ArticleComponent implements OnInit{
     observable.subscribe({
       next: article => console.log(article)
     })
+  }
+
+  delete(button: HTMLButtonElement): void {
+    const article: Article = this.articleForm.value;
+
+    if(article.id) {
+      this.newshubService.deleteArticle(article.id).subscribe({
+        next: article => console.log(article)
+      });
+    }
+
+    button.blur();
   }
 }

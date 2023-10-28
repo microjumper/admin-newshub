@@ -47,6 +47,10 @@ export class NewshubService {
     return this.httpClient.put<Article>(`${this.baseUrl}/update/${article.id}${this.getCode}`, article);
   }
 
+  deleteArticle(id: string): Observable<Article> {
+    return this.httpClient.delete<Article>(`${this.baseUrl}/delete/${id}${this.getCode}`);
+  }
+
   search(searchTerm: string, limit: number, pageNumber = 1): Observable<PaginatedResponse> {
     const offset = pageNumber - 1;
     if (limit > 0 && offset >= 0) {

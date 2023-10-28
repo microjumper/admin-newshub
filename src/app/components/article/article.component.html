@@ -1,6 +1,6 @@
 <div class="container">
   <p-card class="article-card shadow-3">
-    <form [formGroup]="articleForm" (ngSubmit)="save(articleForm)">
+    <form [formGroup]="articleForm" (ngSubmit)="save()">
       <input id="id" type="hidden" formControlName="id">
 
       <div class="p-grid p-fluid">
@@ -46,15 +46,16 @@
       </div>
 
       <div class="button-container py-2">
-        <button class="p-button-info p-button-raised" pButton pRipple routerLink="../"
+        <button class="p-button-info p-button-raised" pButton pRipple routerLink="../" type="button"
                 #cancelButton (click)="cancelButton.blur()">CANCEL</button>
 
         <button [disabled]="!articleForm.dirty || articleForm.invalid"
                 class="p-button-success p-button-raised" pButton pRipple type="submit"
                 #submitButton (click)="submitButton.blur()">SAVE</button>
 
-        <button class="p-button-danger p-button-raised" pButton pRipple
-                #deleteButton (click)="deleteButton.blur()">DELETE</button>
+        <button [disabled]="articleForm.value.id === this.nullId" type="button"
+                class="p-button-danger p-button-raised" pButton pRipple
+                #deleteButton (click)="delete(deleteButton)">DELETE</button>
       </div>
     </form>
   </p-card>

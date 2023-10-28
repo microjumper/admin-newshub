@@ -13,13 +13,16 @@ import { CardModule } from "primeng/card";
 import { ToolbarModule } from "primeng/toolbar";
 import { InputTextModule } from "primeng/inputtext";
 import { MenuModule } from "primeng/menu";
+import { KeyFilterModule } from "primeng/keyfilter";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { ConfirmationService, MessageService } from "primeng/api";
+import { ToastModule } from "primeng/toast";
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ArticleComponent } from './components/article/article.component';
-import {KeyFilterModule} from "primeng/keyfilter";
 
 @NgModule({
   declarations: [
@@ -42,9 +45,11 @@ import {KeyFilterModule} from "primeng/keyfilter";
     ReactiveFormsModule,
     ToolbarModule,
     MenuModule,
-    KeyFilterModule
+    KeyFilterModule,
+    ConfirmDialogModule,
+    ToastModule
   ],
-  providers: [EditableRow],
+  providers: [EditableRow, ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

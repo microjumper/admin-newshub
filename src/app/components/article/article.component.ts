@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 import { Observable } from "rxjs";
 
+import { ConfirmationService } from "primeng/api";
+
 import { NewshubService } from "../../services/newshub/newshub.service";
 import { Article } from "../../types/article.type";
+import { ToastService } from "../../services/toast/toast.service";
 
 @Component({
   selector: 'app-article',
@@ -18,7 +21,8 @@ export class ArticleComponent implements OnInit{
 
   readonly nullId = "0";
 
-  constructor(private activatedRoute: ActivatedRoute, private newshubService: NewshubService) {
+  constructor(private activatedRoute: ActivatedRoute, private newshubService: NewshubService, private router: Router,
+              private confirmationService: ConfirmationService, private toastService: ToastService) {
     this.articleForm = new FormGroup({
       id: new FormControl(this.nullId),
       title: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
@@ -52,7 +56,16 @@ export class ArticleComponent implements OnInit{
     );
   }
 
-  save() {
+  onSubmit() {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.save()
+    });
+  }
+
+  private save() {
     const article: Article = this.articleForm.value;
 
     let observable: Observable<Article>;
@@ -64,18 +77,29 @@ export class ArticleComponent implements OnInit{
     }
 
     observable.subscribe({
-      next: article => console.log(article)
-    })
+      next: article => this.toastService.showSuccess(),
+      complete: () => this.router.navigate(['../']).then(),
+      error: (error: Error) => this.toastService.showError(`${error.message}`)
+    });
   }
 
   delete(button: HTMLButtonElement): void {
-    const article: Article = this.articleForm.value;
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        const article: Article = this.articleForm.value;
 
-    if(article.id) {
-      this.newshubService.deleteArticle(article.id).subscribe({
-        next: article => console.log(article)
-      });
-    }
+        if(article.id) {
+          this.newshubService.deleteArticle(article.id).subscribe({
+            next: article => this.toastService.showSuccess(),
+            complete: () => this.router.navigate(['../']).then(),
+            error: (error: Error) => this.toastService.showError(`${error.message}`)
+          });
+        }
+      }
+    });
 
     button.blur();
   }

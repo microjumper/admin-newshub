@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-
 import { ButtonModule }  from "primeng/button";
 import { EditableRow, TableModule} from "primeng/table";
 import { RippleModule } from "primeng/ripple";
@@ -18,17 +17,37 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { ToastModule } from "primeng/toast";
 
+import {
+  MSAL_INSTANCE,
+  MsalService
+} from "@azure/msal-angular";
+import {
+  IPublicClientApplication,
+  PublicClientApplication
+} from "@azure/msal-browser";
+
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ArticleComponent } from './components/article/article.component';
+import { LoginComponent } from './components/login/login.component';
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: "",
+      redirectUri: "",
+    }
+  });
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ArticleComponent
+    ArticleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +68,16 @@ import { ArticleComponent } from './components/article/article.component';
     ConfirmDialogModule,
     ToastModule
   ],
-  providers: [EditableRow, ConfirmationService, MessageService],
+  providers: [
+    EditableRow,
+    ConfirmationService,
+    MessageService,
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
+    MsalService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

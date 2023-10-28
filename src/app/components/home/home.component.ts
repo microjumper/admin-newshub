@@ -11,6 +11,7 @@ import { NewsApiService } from "../../services/news-api/news-api.service";
 import { NewshubService } from "../../services/newshub/newshub.service";
 import { Article } from "../../types/article.type";
 import { PaginatedResponse } from "../../types/paginated.type";
+import { AuthService } from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,8 @@ export class HomeComponent implements OnDestroy {
 
   private subscription: Subscription | undefined;
 
-  constructor(private newsApiService: NewsApiService, private newshubService: NewshubService, private router: Router) {
+  constructor(private newsApiService: NewsApiService, private newshubService: NewshubService,
+              private router: Router, private authService: AuthService) {
     this.searchForm = new FormGroup({
       search: new FormControl<string>('')
     });
@@ -68,14 +70,12 @@ export class HomeComponent implements OnDestroy {
   private initMenu(): void {
     this.items = [
       {
-        label: 'User',
+        label: this.authService.getActiveAccountName() || 'User',
         items: [
           {
             label: 'Logout',
             icon: 'pi pi-refresh',
-            command: () => {
-              this.logout();
-            }
+            command: () => this.authService.logout()
           }
         ]
       }
@@ -111,10 +111,6 @@ export class HomeComponent implements OnDestroy {
       },
       complete: () => subscription.unsubscribe()
     });
-  }
-
-  private logout(): void {
-
   }
 
   fetchNews(): void {

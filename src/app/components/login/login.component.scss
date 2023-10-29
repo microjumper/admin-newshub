@@ -1,0 +1,30 @@
+.container {
+  height: 100%;
+
+  background-image: url("../../../assets/markus-spiske-2G8mnFvH8xk-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  p-card {
+    max-width: 480px;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+  .backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    height: 100%;
+
+    backdrop-filter: blur(21px);
+  }
+}

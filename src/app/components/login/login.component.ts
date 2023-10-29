@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 
+import { Router } from "@angular/router";
+
 import { AuthService } from "../../services/auth/auth.service";
+import { ToastService } from "../../services/toast/toast.service";
 
 @Component({
   selector: 'app-login',
@@ -9,18 +12,15 @@ import { AuthService } from "../../services/auth/auth.service";
 })
 export class LoginComponent {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private toastService: ToastService, private router: Router) {}
 
   login() {
     this.authService.loginWithMicrosoft().subscribe({
         next: (result) => {
-          console.log(result);
+          this.toastService.showSuccess('Login completed successfully');
+          this.router.navigate(['/']).then();
         },
         error: (error) => console.log(error)
     });
-  }
-
-  logout(): void {
-    this.authService.logout();
   }
 }

@@ -3,6 +3,8 @@
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');
+
 html, body {
   margin: 0;
   padding: 0;
@@ -19,4 +21,18 @@ html, body {
 
 p-menu > div {
   width: 250px
+}
+
+.p-card .p-card-title {
+  font-family: 'Lora', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.p-card .p-card-subtitle {
+  font-family: 'Lora', serif;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
 }

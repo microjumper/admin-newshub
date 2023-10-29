@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'articles/create', component: ArticleComponent, canActivate: [authGuard] },
   { path: 'articles/:id', component: ArticleComponent, resolve: { article: articleResolver }, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

@@ -2,8 +2,29 @@
   padding: 32px
 }
 
+.brand {
+  margin: 0;
+
+  font-family: 'Lora', serif;
+  font-size: 2rem;
+  font-weight: 400;
+
+  letter-spacing: 6px;
+
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .article-image {
   object-fit: cover;
+}
+
+.p-toolbar-group-start {
+  margin-left: 16px
+}
+
+.p-toolbar-group-end {
+  margin-right: 16px
 }
 
 .floating-button {

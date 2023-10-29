@@ -1,3 +1,11 @@
-<p>login works!</p>
-<button (click)="login()">Login</button>
-<button (click)="logout()">Logout</button>
+<div class="container">
+  <div class="backdrop"></div>
+  <p-card header="Welcome to" subheader="Newshub">
+    <ng-template pTemplate="header">
+      <img alt="Card" src="../../../assets/absolutvision-WYd_PkCa1BY-unsplash.jpg" />
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button label="Sign in with Microsoft" icon="pi pi-microsoft" (onClick)="login()"></p-button>
+    </ng-template>
+  </p-card>
+</div>

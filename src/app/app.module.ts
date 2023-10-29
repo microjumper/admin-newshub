@@ -36,8 +36,8 @@ import { LoginComponent } from './components/login/login.component';
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: "",
-      redirectUri: "",
+      clientId: process.env['CLIENT_ID'] || '',
+      redirectUri: "/",
     }
   });
 }

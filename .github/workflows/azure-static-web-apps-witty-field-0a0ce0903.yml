@@ -23,6 +23,7 @@ jobs:
       - name: 'Create env file'
         run: |
           touch .env
+          echo CLIENT_ID="${{ secrets.CLIENT_ID }}" >> .env
           echo GET_ALL_CODE="${{ secrets.GET_ALL_CODE }}" >> .env
           echo GET_BY_CODE="${{ secrets.GET_BY_CODE }}" >> .env
           echo ADD_CODE="${{ secrets.ADD_CODE }}" >> .env

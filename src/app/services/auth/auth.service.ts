@@ -30,7 +30,7 @@ export class AuthService {
 
   logout() {
     this.msalService.logoutPopup({
-      mainWindowRedirectUri: "login"
+      mainWindowRedirectUri: "/"
     });
   }
 }

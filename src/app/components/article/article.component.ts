@@ -67,7 +67,8 @@ export class ArticleComponent implements OnInit{
 
   private save() {
     const article: Article = this.articleForm.value;
-
+    article.publishedAt = new Date().toISOString();
+    
     let observable: Observable<Article>;
 
     if(article.id !== this.nullId) {

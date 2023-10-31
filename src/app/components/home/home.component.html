@@ -42,7 +42,7 @@
           <img #img [src]="article.urlToImage" (error)="onImageError(img)"
                width="200" height="150" alt="" class="article-image"/>
         </td>
-        <td>{{ article.publishedAt | date: 'fullDate'}}</td>
+        <td>{{ article.publishedAt | date: 'medium'}}</td>
       </tr>
     </ng-template>
   </p-table>

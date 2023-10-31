@@ -70,7 +70,7 @@ export class NewshubService {
   search(searchTerm: string, limit: number, pageNumber = 1): Observable<PaginatedResponse> {
     const offset = pageNumber - 1;
     if (limit > 0 && offset >= 0) {
-      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/search/${searchTerm}/${limit}/${offset}${this.searchCode}`);
+      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/search/${encodeURI(searchTerm)}/${limit}/${offset}${this.searchCode}`);
     }
     return of({ totalRecords: 0, articles: [] });
   }

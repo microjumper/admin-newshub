@@ -101,7 +101,7 @@ export class HomeComponent implements OnDestroy {
     let observable: Observable<PaginatedResponse>;
 
     if(searchTerm.length >= 3) {
-      observable = this.newshubService.search(searchTerm, this.rows, pageNumber);
+      observable = this.newshubService.search(searchTerm.replace(/\s+/g, ' ').trim(), this.rows, pageNumber);
     } else {
       observable = this.newshubService.getArticles(this.rows, pageNumber)
     }

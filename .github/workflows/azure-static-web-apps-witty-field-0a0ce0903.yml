@@ -8,10 +8,11 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
@@ -21,7 +22,13 @@ jobs:
           lfs: false
       - name: 'Create env file'
         run: |
-          echo NEWS_API_KEY="${{ secrets.NEWS_API_KEY }}" > .env
+          touch .env
+          echo GET_ALL_CODE="${{ secrets.GET_ALL_CODE }}" >> .env
+          echo GET_BY_CODE="${{ secrets.GET_BY_CODE }}" >> .env
+          echo ADD_CODE="${{ secrets.ADD_CODE }}" >> .env
+          echo UPDATE_CODE="${{ secrets.UPDATE_CODE }}" >> .env
+          echo DELETE_CODE="${{ secrets.DELETE_CODE }}" >> .env
+          echo SEARCH_CODE="${{ secrets.SEARCH_CODE }}" >> .env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

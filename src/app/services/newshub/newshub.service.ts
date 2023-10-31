@@ -12,17 +12,29 @@ import { PaginatedResponse } from "../../types/paginated.type";
 export class NewshubService {
 
   private readonly baseUrl: string | undefined;
-  private readonly getCode: string | undefined;
+  private readonly getAllCode: string | undefined;
+  private readonly getByCode: string | undefined;
+  private readonly addCode: string | undefined;
+  private readonly updateCode: string | undefined;
+  private readonly deleteCode: string | undefined;
   private readonly searchCode: string | undefined;
 
   constructor(private httpClient: HttpClient) {
     if (window.location.hostname === "localhost") {
       this.baseUrl = "http://localhost:7071/api/articles";
-      this.getCode = '';
+      this.getAllCode = '';
+      this.getByCode = '';
+      this.addCode = '';
+      this.updateCode = '';
+      this.deleteCode = '';
       this.searchCode = '';
     } else {  // process is not available in browser
       this.baseUrl = "https://newshubfunction.azurewebsites.net/api/articles";
-      this.getCode = `?code=${process.env['GET_CODE']}`;
+      this.getAllCode = `?code=${process.env['GET_ALL_CODE']}`;
+      this.getByCode = `?code=${process.env['GET_BY_CODE']}`;
+      this.addCode = `?code=${process.env['ADD_CODE']}`;
+      this.updateCode = `?code=${process.env['UPDATE_CODE']}`;
+      this.deleteCode = `?code=${process.env['DELETE_CODE']}`;
       this.searchCode = `?code=${process.env['SEARCH_CODE']}`;
     }
   }
@@ -30,25 +42,25 @@ export class NewshubService {
   getArticles(limit: number, pageNumber = 1): Observable<PaginatedResponse> {
     const offset = pageNumber - 1;
     if (limit > 0 && offset >= 0) {
-      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/all/${limit}/${offset}${this.getCode}`);
+      return this.httpClient.get<PaginatedResponse>(`${this.baseUrl}/all/${limit}/${offset}${this.getAllCode}`);
     }
     return of({ totalRecords: 0, articles: [] })
   }
 
   getArticleById(id: string): Observable<Article> {
-    return this.httpClient.get<Article>(`${this.baseUrl}/get/${id}${this.getCode}`);
+    return this.httpClient.get<Article>(`${this.baseUrl}/get/${id}${this.getByCode}`);
   }
 
   addArticle(article: Article): Observable<Article> {
-    return this.httpClient.post<Article>(`${this.baseUrl}/add${this.getCode}`, article);
+    return this.httpClient.post<Article>(`${this.baseUrl}/add${this.addCode}`, article);
   }
 
   updateArticle(article: Article): Observable<Article> {
-    return this.httpClient.put<Article>(`${this.baseUrl}/update/${article.id}${this.getCode}`, article);
+    return this.httpClient.put<Article>(`${this.baseUrl}/update/${article.id}${this.updateCode}`, article);
   }
 
   deleteArticle(id: string): Observable<Article> {
-    return this.httpClient.delete<Article>(`${this.baseUrl}/delete/${id}${this.getCode}`);
+    return this.httpClient.delete<Article>(`${this.baseUrl}/delete/${id}${this.deleteCode}`);
   }
 
   search(searchTerm: string, limit: number, pageNumber = 1): Observable<PaginatedResponse> {

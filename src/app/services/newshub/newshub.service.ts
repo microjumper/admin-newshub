@@ -11,13 +11,15 @@ import { PaginatedResponse } from "../../types/paginated.type";
 })
 export class NewshubService {
 
-  private readonly baseUrl: string | undefined;
-  private readonly getAllCode: string | undefined;
-  private readonly getByCode: string | undefined;
-  private readonly addCode: string | undefined;
-  private readonly updateCode: string | undefined;
-  private readonly deleteCode: string | undefined;
-  private readonly searchCode: string | undefined;
+  private readonly baseUrl: string;
+  private readonly getAllCode: string;
+  private readonly getByCode: string;
+  private readonly addCode: string;
+  private readonly updateCode: string;
+  private readonly deleteCode: string;
+  private readonly searchCode: string;
+
+  private readonly feedEndpoint: string;
 
   constructor(private httpClient: HttpClient) {
     if (window.location.hostname === "localhost") {
@@ -28,6 +30,7 @@ export class NewshubService {
       this.updateCode = '';
       this.deleteCode = '';
       this.searchCode = '';
+      this.feedEndpoint = `${process.env['FEED_ENDPOINT']}`;  // from localhost only
     } else {  // process is not available in browser
       this.baseUrl = "https://newshubfunction.azurewebsites.net/api/articles";
       this.getAllCode = `?code=${process.env['GET_ALL_CODE']}`;
@@ -36,6 +39,7 @@ export class NewshubService {
       this.updateCode = `?code=${process.env['UPDATE_CODE']}`;
       this.deleteCode = `?code=${process.env['DELETE_CODE']}`;
       this.searchCode = `?code=${process.env['SEARCH_CODE']}`;
+      this.feedEndpoint = '';
     }
   }
 
@@ -71,7 +75,10 @@ export class NewshubService {
     return of({ totalRecords: 0, articles: [] });
   }
 
-  feedNewsHubDb(articles: Article[]) {
-    return this.httpClient.post<Article[]>('http://localhost:7071/api/FeedDatabase', articles);
+  feedNewsHubDb(articles: Article[]) {  // from localhost only
+    if(this.feedEndpoint === '')
+      return of([]);
+
+    return this.httpClient.post<Article[]>(`${this.feedEndpoint}`, articles);
   }
 }

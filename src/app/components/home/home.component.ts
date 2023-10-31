@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 
-import { debounceTime, distinctUntilChanged, filter, map, Observable, Subscription } from "rxjs";
+import {debounceTime, distinctUntilChanged, filter, map, Observable, Subscription, switchMap} from "rxjs";
 
 import { TableLazyLoadEvent } from "primeng/table";
 import { MenuItem } from "primeng/api";
@@ -12,6 +12,7 @@ import { NewshubService } from "../../services/newshub/newshub.service";
 import { Article } from "../../types/article.type";
 import { PaginatedResponse } from "../../types/paginated.type";
 import { AuthService } from "../../services/auth/auth.service";
+import { ToastService } from "../../services/toast/toast.service";
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,7 @@ export class HomeComponent implements OnDestroy {
   private subscription: Subscription | undefined;
 
   constructor(private newsApiService: NewsApiService, private newshubService: NewshubService,
-              private router: Router, private authService: AuthService) {
+              private router: Router, private authService: AuthService, private toastService: ToastService) {
     this.searchForm = new FormGroup({
       search: new FormControl<string>('')
     });
@@ -72,6 +73,11 @@ export class HomeComponent implements OnDestroy {
       {
         label: this.authService.getActiveAccountName() || 'User',
         items: [
+          {
+            label: 'Feed DB',
+            icon: 'pi pi-database',
+            command: () => this.feedDatabase()
+          },
           {
             label: 'Logout',
             icon: 'pi pi-refresh',
@@ -113,18 +119,18 @@ export class HomeComponent implements OnDestroy {
     });
   }
 
-  fetchNews(): void {
-    this.newsApiService.getTopHeadlines().subscribe(
-      response => {
-        this.articles = response;
-        console.log(response);
+  private feedDatabase(): void {
+    this.newsApiService.getTopHeadlines().pipe(
+      switchMap(articles => this.newshubService.feedNewsHubDb(articles))
+    ).subscribe({
+      next: articles => {
+        this.toastService.showSuccess(`${articles.length} articles added to the database`);
+        console.log(articles);
+      },
+      error: (error: Error) => {
+        this.toastService.showError();
+        console.error(error.message);
       }
-    );
-  }
-
-  feedDatabase(): void {
-    this.newshubService.feedNewsHubDb(this.articles).subscribe(
-      response => console.log(response)
-    )
+    });
   }
 }

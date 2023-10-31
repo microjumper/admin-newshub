@@ -19,8 +19,6 @@ export class NewshubService {
   private readonly deleteCode: string;
   private readonly searchCode: string;
 
-  private readonly feedEndpoint: string;
-
   constructor(private httpClient: HttpClient) {
     if (window.location.hostname === "localhost") {
       this.baseUrl = "http://localhost:7071/api/articles";
@@ -30,7 +28,6 @@ export class NewshubService {
       this.updateCode = '';
       this.deleteCode = '';
       this.searchCode = '';
-      this.feedEndpoint = `${process.env['FEED_ENDPOINT']}`;  // from localhost only
     } else {  // process is not available in browser
       this.baseUrl = "https://newshubfunction.azurewebsites.net/api/articles";
       this.getAllCode = `?code=${process.env['GET_ALL_CODE']}`;
@@ -39,7 +36,6 @@ export class NewshubService {
       this.updateCode = `?code=${process.env['UPDATE_CODE']}`;
       this.deleteCode = `?code=${process.env['DELETE_CODE']}`;
       this.searchCode = `?code=${process.env['SEARCH_CODE']}`;
-      this.feedEndpoint = '';
     }
   }
 
@@ -75,10 +71,11 @@ export class NewshubService {
     return of({ totalRecords: 0, articles: [] });
   }
 
-  feedNewsHubDb(articles: Article[]) {  // from localhost only
-    if(this.feedEndpoint === '')
-      return of([]);
 
-    return this.httpClient.post<Article[]>(`${this.feedEndpoint}`, articles);
+  feedNewsHubDb(articles: Article[]) {  // from localhost only
+    if(typeof process !== 'undefined' && process !== null) {
+      return this.httpClient.post<Article[]>(`${process.env['FEED_ENDPOINT']}`, articles);
+    }
+    return of([]);
   }
 }

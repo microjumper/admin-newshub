@@ -76,7 +76,8 @@ export class HomeComponent implements OnDestroy {
           {
             label: 'Feed DB',
             icon: 'pi pi-database',
-            command: () => this.feedDatabase()
+            command: () => this.feedDatabase(),
+            disabled: true
           },
           {
             label: 'Logout',
